@@ -2,11 +2,11 @@ module.exports = async ({
     deployments,
     getNamedAccounts
   }) => {
-    console.log("28. Deploy INV Feed")
+    console.log("28. Deploy HONEY Feed")
     const {deploy} = deployments;
     const {deployer, ethFeed, invKeep3rFeed, inv, weth} = await getNamedAccounts();
 
-    await deploy('InvFeed', {
+    await deploy('HoneyFeed', {
       from: deployer,
       args:[
         invKeep3rFeed,
@@ -17,4 +17,4 @@ module.exports = async ({
     });
   };
 
-  module.exports.tags = ['InvFeed'];
+  module.exports.tags = ['HoneyFeed'];

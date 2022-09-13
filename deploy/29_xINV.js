@@ -2,16 +2,16 @@ module.exports = async ({
     deployments,
     getNamedAccounts,
   }) => {
-    console.log("28. Deploy xINV")
+    console.log("28. Deploy xHONEY")
     const { deploy, save } = deployments;
     const { deployer, inv, gov } = await getNamedAccounts();
 
     const comptroller = await deployments.get('Unitroller');
-    const name = 'xINV';
-    const symbol = 'XINV';
+    const name = 'xHONEY';
+    const symbol = 'XHONEY';
     const decimals = 18;
 
-    await deploy('XINV', {
+    await deploy('XHONEY', {
       from: deployer,
       args:[
           inv, // inverse as underlying
@@ -25,9 +25,9 @@ module.exports = async ({
       ]
     });
 
-    const XINV = await deployments.get('XINV');
+    const XHONEY = await deployments.get('XHONEY');
 
-    await save("XINV", XINV);
+    await save("XHONEY", XHONEY);
   };
 
-module.exports.tags = ['XINV'];
+module.exports.tags = ['XHONEY'];

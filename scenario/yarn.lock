@@ -336,7 +336,7 @@
 "@babel/helpers@^7.7.4":
   version "7.7.4"
   resolved "https://registry.yarnpkg.com/@babel/helpers/-/helpers-7.7.4.tgz#62c215b9e6c712dadc15a9a0dcab76c92a940302"
-  integrity sha512-ak5NGZGJ6LV85Q1Zc9gn2n+ayXOizryhjSUBTdu5ih1tlVCJeuQENzc4ItyCVhINVXvIT/ZQ4mheGIsfBkpskg==
+  integrity sha512-ak5NGZGJ6LV85Q1Zc9gn2n+ayXOizryhjSUBTdu5ih1tlVCJeuQENzc4ItyCVhHONEYXvIT/ZQ4mheGIsfBkpskg==
   dependencies:
     "@babel/template" "^7.7.4"
     "@babel/traverse" "^7.7.4"

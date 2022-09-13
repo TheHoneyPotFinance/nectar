@@ -4,8 +4,8 @@ const hre = require("hardhat");
 
 let wallets = {};
 
-let INVArtifact;
-let XINVArtifact;
+let HONEYArtifact;
+let XHONEYArtifact;
 let ComptrollerArtifact;
 let UnitrollerArtifact;
 let CERC20ImmutableArtifact;
@@ -15,19 +15,19 @@ let JumpRateModelV2Artifact;
 let ERC20Artifact;
 
 let inv;
-let xINV;
+let xHONEY;
 let comptroller;
 let unitroller;
 let dola;
-let anDOLA;
+let anDEW;
 let oracle;
 let oracleFeed;
 let jumpRateModelV2;
 let signers;
 
 const init = async () => {
-    INVArtifact = await hre.artifacts.readArtifact('INV');
-    XINVArtifact = await hre.artifacts.readArtifact('XINV');
+    HONEYArtifact = await hre.artifacts.readArtifact('HONEY');
+    XHONEYArtifact = await hre.artifacts.readArtifact('XHONEY');
     ComptrollerArtifact = await hre.artifacts.readArtifact('Comptroller');
     UnitrollerArtifact = await hre.artifacts.readArtifact('Unitroller');
     TokenErrorReporterArtifact = await hre.artifacts.readArtifact('TokenErrorReporter');
@@ -46,7 +46,7 @@ const init = async () => {
 }
 
 const deployInv = async () => {
-    inv = await hre.waffle.deployContract(wallets.deployer, INVArtifact, [wallets.deployer.address]);
+    inv = await hre.waffle.deployContract(wallets.deployer, HONEYArtifact, [wallets.deployer.address]);
     return inv;
 }
 
@@ -61,22 +61,22 @@ const deployUnitroller = async () => {
 }
 
 const deployXinv = async () => {
-    xINV =  await hre.waffle.deployContract(
+    xHONEY =  await hre.waffle.deployContract(
         wallets.deployer,
-        XINVArtifact,
+        XHONEYArtifact,
         [
             inv.address,
             unitroller.address,
             "200000000000000000",
             wallets.treasury.address,
-            "xInverse Finance",
-            "xINV",
+            "xTheHoneyPot Finance",
+            "xHONEY",
             "18",
             wallets.deployer.address,
         ],
     );
-    await hre.deployments.save('xINV', xINV);
-    return xINV;
+    await hre.deployments.save('xHONEY', xHONEY);
+    return xHONEY;
 }
 
 const deployJumpRateModelV2 = async () => {
@@ -101,7 +101,7 @@ const deployDola = async () => {
         ERC20Artifact,
         [
             "Dola USD Stablecoin",
-            "DOLA",
+            "DEW",
             18
         ]
     );
@@ -109,7 +109,7 @@ const deployDola = async () => {
 }
 
 const deployAndola = async () => {
-    anDOLA = await hre.waffle.deployContract(
+    anDEW = await hre.waffle.deployContract(
         wallets.deployer,
         CERC20ImmutableArtifact,
         [
@@ -123,7 +123,7 @@ const deployAndola = async () => {
             wallets.deployer.address
         ],
     );
-    return anDOLA;
+    return anDEW;
 }
 
 const deployOracleFeed = async () => {
@@ -158,12 +158,12 @@ const supportMarket = async (market_, unitroller_) => {
     return unitrollerProxy;
 }
 
-const pauseMint = async (unitroller_, xINV_) => {
+const pauseMint = async (unitroller_, xHONEY_) => {
     const unitrollerProxy = await hre.ethers.getContractAt(
         "Comptroller",
         unitroller_,
     );
-    await unitrollerProxy.connect(wallets.deployer)._setMintPaused(xINV_, true);
+    await unitrollerProxy.connect(wallets.deployer)._setMintPaused(xHONEY_, true);
 }
 
 const address = async (n) => {
@@ -173,8 +173,8 @@ const address = async (n) => {
 
 const batchMintXinv = async (wallets_, toMint = hre.ethers.utils.parseEther("1")) => {
     return Promise.all(wallets_.map( async wallet => {
-        await inv.connect(wallet).approve(xINV.address, toMint);
-        await xINV.connect(wallet).mint(toMint);
+        await inv.connect(wallet).approve(xHONEY.address, toMint);
+        await xHONEY.connect(wallet).mint(toMint);
         
         return Promise.resolve(true);
     }));

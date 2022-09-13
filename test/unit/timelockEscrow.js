@@ -7,10 +7,10 @@ const { init, wallets, deployInv, deployXinv,
     evmSetNextBlockTimestamp } = require('../util/xinv');
 const toRedeem1 = hre.ethers.utils.parseEther("1");
 
-describe("xINV Test", () => {
+describe("xHONEY Test", () => {
 
     let inv;
-    let xINV;
+    let xHONEY;
     let comptroller;
     let unitroller;
     let timelockEscrow;
@@ -27,26 +27,26 @@ describe("xINV Test", () => {
         await unitroller.connect(wallets.deployer)._setPendingImplementation(comptroller.address);
         await comptroller.connect(wallets.deployer)._become(unitroller.address);
     
-        xINV = await deployXinv();
+        xHONEY = await deployXinv();
     
-        await hre.deployments.save('xINV', xINV);
-        const escrowAddress = await xINV.escrow();
-        timelockEscrow = await hre.ethers.getContractAt("contracts/XINV.sol:TimelockEscrow", escrowAddress);
+        await hre.deployments.save('xHONEY', xHONEY);
+        const escrowAddress = await xHONEY.escrow();
+        timelockEscrow = await hre.ethers.getContractAt("contracts/XHONEY.sol:TimelockEscrow", escrowAddress);
     
-        // Ensure INV is transferable in test cases.
+        // Ensure HONEY is transferable in test cases.
         await inv.connect(wallets.deployer).openTheGates();
     });
     
     describe('timelock escrow', function () {
 
         beforeEach( async () => {
-            await supportMarket(xINV.address, unitroller.address);
+            await supportMarket(xHONEY.address, unitroller.address);
         });
 
         it('sets governance, underlying and market on init', async () => {
             expect(await timelockEscrow.underlying()).to.equal(inv.address);
             expect(await timelockEscrow.governance()).to.equal(wallets.deployer.address);
-            expect(await timelockEscrow.market()).to.equal(xINV.address);
+            expect(await timelockEscrow.market()).to.equal(xHONEY.address);
         });
 
         it('only allows governance to set escrow duration', async () => {
@@ -71,8 +71,8 @@ describe("xINV Test", () => {
             // approve  and mint
             await batchMintXinv([ wallets.deployer ], hre.ethers.utils.parseEther("5"));
 
-            // redeem cToken aka xINV for underlying and check balances of both xINV and INV
-            await redeem(xINV, wallets.deployer, toRedeem1);
+            // redeem cToken aka xHONEY for underlying and check balances of both xHONEY and HONEY
+            await redeem(xHONEY, wallets.deployer, toRedeem1);
 
             const escrowPendingWithdrawal = (await timelockEscrow.pendingWithdrawals(wallets.deployer.address))["amount"];
             expect(escrowPendingWithdrawal).to.equal(toRedeem1);
@@ -86,9 +86,9 @@ describe("xINV Test", () => {
             await timelockEscrow.connect(wallets.deployer)._setEscrowDuration(0);
             expect(await timelockEscrow.duration()).to.equal(0);
 
-            // redeem cToken aka xINV for underlying
+            // redeem cToken aka xHONEY for underlying
             const balanceBefore = await balanceOf(inv, wallets.deployer.address);
-            await redeem(xINV, wallets.deployer, toRedeem1);
+            await redeem(xHONEY, wallets.deployer, toRedeem1);
             expect(await balanceOf(inv, wallets.deployer.address)).to.equal(balanceBefore.add(toRedeem1));
         });
 
@@ -97,7 +97,7 @@ describe("xINV Test", () => {
             await batchMintXinv([ wallets.deployer ], hre.ethers.utils.parseEther("5"));
 
             // redeem and check funds are SAFU in escrow
-            await redeem(xINV, wallets.deployer, toRedeem1);
+            await redeem(xHONEY, wallets.deployer, toRedeem1);
             expect((await timelockEscrow.pendingWithdrawals(wallets.deployer.address))["amount"]).to.equal(toRedeem1);
 
             // fast forward to time below withdrawal timestamp

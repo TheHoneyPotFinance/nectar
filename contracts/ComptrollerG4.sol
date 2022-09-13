@@ -7,7 +7,7 @@ import "./PriceOracle.sol";
 import "./ComptrollerInterface.sol";
 import "./ComptrollerStorage.sol";
 import "./Unitroller.sol";
-import "./Governance/INV.sol";
+import "./Governance/HONEY.sol";
 
 /**
  * @title Compound's Comptroller Contract
@@ -1233,7 +1233,7 @@ contract ComptrollerG4 is ComptrollerV3Storage, ComptrollerInterface, Comptrolle
      */
     function transferComp(address user, uint userAccrued, uint threshold) internal returns (uint) {
         if (userAccrued >= threshold && userAccrued > 0) {
-            INV comp = INV(getCompAddress());
+            HONEY comp = HONEY(getCompAddress());
             uint compRemaining = comp.balanceOf(address(this));
             if (userAccrued <= compRemaining) {
                 comp.transfer(user, userAccrued);

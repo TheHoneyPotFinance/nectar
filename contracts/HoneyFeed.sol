@@ -11,7 +11,7 @@ interface IKeep3rV2 {
     function current(address tokenIn, uint amountIn, address tokenOut) external view returns (uint256 amountOut, uint lastUpdatedAgo);
 }
 
-contract InvFeed is IFeed {
+contract HoneyFeed is IFeed {
     using SafeMath for uint;
 
     IKeep3rV2 public keep3rV2Feed;

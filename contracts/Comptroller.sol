@@ -6,7 +6,7 @@ import "./PriceOracle.sol";
 import "./ComptrollerInterface.sol";
 import "./ComptrollerStorage.sol";
 import "./Unitroller.sol";
-import "./Governance/IINV.sol";
+import "./Governance/IHONEY.sol";
 
 /**
  * @title Compound's Comptroller Contract
@@ -1221,7 +1221,7 @@ contract Comptroller is ComptrollerV5Storage, ComptrollerInterface, ComptrollerE
      * @return The amount of COMP which was NOT transferred to the user
      */
     function grantCompInternal(address user, uint amount) internal returns (uint) {
-        IINV comp = IINV(getCompAddress());
+        IHONEY comp = IHONEY(getCompAddress());
         uint allowance = comp.allowance(getTreasuryAddress(), address(this));
         uint balance = comp.balanceOf(getTreasuryAddress());
         uint compRemaining = allowance < balance? allowance: balance; // minimum
@@ -1296,11 +1296,11 @@ contract Comptroller is ComptrollerV5Storage, ComptrollerInterface, ComptrollerE
      * @return The address of COMP
      */
     function getCompAddress() public view returns (address) {
-        return 0x41D5D79431A913C4aE7d69a668ecdfE5fF9DFB68; // INV Token
+        return 0x41D5D79431A913C4aE7d69a668ecdfE5fF9DFB68; // HONEY Token
     }
 
     /**
-     * @notice Return the address of the Inverse treasury
+     * @notice Return the address of the TheHoneyPot treasury
      * @return The address of treasury
      */
     function getTreasuryAddress() public view returns (address) {
@@ -1308,8 +1308,8 @@ contract Comptroller is ComptrollerV5Storage, ComptrollerInterface, ComptrollerE
     }
 
     /**
-     * @notice Return the address of the xINV market
-     * @return The address of xINV
+     * @notice Return the address of the xHONEY market
+     * @return The address of xHONEY
      */
     function getXinvAddress() public view returns (address) {
         return 0x65b35d6Eb7006e0e607BC54EB2dFD459923476fE;

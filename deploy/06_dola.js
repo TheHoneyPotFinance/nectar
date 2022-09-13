@@ -10,7 +10,7 @@ module.exports = async ({
       from: deployer,
       args:[
           "Dola USD Stablecoin",
-          "DOLA",
+          "DEW",
           18
       ]
     });

@@ -4,11 +4,11 @@ const { init, wallets, deployInv, deployXinv,
     supportMarket } = require('../util/xinv');
 
 let inv;
-let xINV;
+let xHONEY;
 let comptroller;
 let unitroller;
 
-describe("xINV Test", () => {
+describe("xHONEY Test", () => {
 
     before( async () => {
         await init();
@@ -22,17 +22,17 @@ describe("xINV Test", () => {
         await unitroller.connect(wallets.deployer)._setPendingImplementation(comptroller.address);
         await comptroller.connect(wallets.deployer)._become(unitroller.address);
     
-        xINV = await deployXinv();
+        xHONEY = await deployXinv();
     
-        // Ensure INV is transferable in test cases.
+        // Ensure HONEY is transferable in test cases.
         await inv.connect(wallets.deployer).openTheGates();
     });
     
     describe('get cash', () => {
         
         it('gets cash prior', async () => {
-            await supportMarket(xINV.address, unitroller.address);
-            const cash = await xINV.getCash();
+            await supportMarket(xHONEY.address, unitroller.address);
+            const cash = await xHONEY.getCash();
             expect(cash).to.be.equal(0);
         });
     });

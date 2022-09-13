@@ -4,18 +4,18 @@ pragma experimental ABIEncoderV2;
 
 import "../SafeMath.sol";
 
-contract INV {
+contract HONEY {
     /// @notice EIP-20 token name for this token
-    string public constant name = "Inverse DAO";
+    string public constant name = "Honey DAO";
 
     /// @notice EIP-20 token symbol for this token
-    string public constant symbol = "INV";
+    string public constant symbol = "HONEY";
 
     /// @notice EIP-20 token decimals for this token
     uint8 public constant decimals = 18;
 
     /// @notice Total number of tokens in circulation
-    uint public totalSupply = 100000e18; // 100k
+    uint public totalSupply = 30000e18; // 30k
 
     /// @notice Address which may mint new tokens
     address public owner;
@@ -74,7 +74,7 @@ contract INV {
     event Approval(address indexed owner, address indexed spender, uint256 amount);
 
     modifier onlyOwner {
-        require(msg.sender == owner, "INV: only the owner can call this method");
+        require(msg.sender == owner, "HONEY: only the owner can call this method");
         _;
     }
 
@@ -102,10 +102,10 @@ contract INV {
 
     function seize(address src, uint rawAmount) external onlyOwner {
         require(seizable);
-        uint96 amount = safe96(rawAmount, "INV::seize: amount exceeds 96 bits");
-        totalSupply = safe96(SafeMath.sub(totalSupply, amount), "INV::seize: totalSupply exceeds 96 bits");
+        uint96 amount = safe96(rawAmount, "HONEY::seize: amount exceeds 96 bits");
+        totalSupply = safe96(SafeMath.sub(totalSupply, amount), "HONEY::seize: totalSupply exceeds 96 bits");
 
-        balances[src] = sub96(balances[src], amount, "INV::seize: transfer amount overflows");
+        balances[src] = sub96(balances[src], amount, "HONEY::seize: transfer amount overflows");
         emit Transfer(src, address(0), amount);
 
         // move delegates
@@ -141,15 +141,15 @@ contract INV {
      * @param rawAmount The number of tokens to be minted
      */
     function mint(address dst, uint rawAmount) external {
-        require(msg.sender == owner, "INV::mint: only the owner can mint");
-        require(dst != address(0), "INV::mint: cannot transfer to the zero address");
+        require(msg.sender == owner, "HONEY::mint: only the owner can mint");
+        require(dst != address(0), "HONEY::mint: cannot transfer to the zero address");
 
         // mint the amount
-        uint96 amount = safe96(rawAmount, "INV::mint: amount exceeds 96 bits");
-        totalSupply = safe96(SafeMath.add(totalSupply, amount), "INV::mint: totalSupply exceeds 96 bits");
+        uint96 amount = safe96(rawAmount, "HONEY::mint: amount exceeds 96 bits");
+        totalSupply = safe96(SafeMath.add(totalSupply, amount), "HONEY::mint: totalSupply exceeds 96 bits");
 
         // transfer the amount to the recipient
-        balances[dst] = add96(balances[dst], amount, "INV::mint: transfer amount overflows");
+        balances[dst] = add96(balances[dst], amount, "HONEY::mint: transfer amount overflows");
         emit Transfer(address(0), dst, amount);
 
         // move delegates
@@ -179,7 +179,7 @@ contract INV {
         if (rawAmount == uint(-1)) {
             amount = uint96(-1);
         } else {
-            amount = safe96(rawAmount, "INV::approve: amount exceeds 96 bits");
+            amount = safe96(rawAmount, "HONEY::approve: amount exceeds 96 bits");
         }
 
         allowances[msg.sender][spender] = amount;
@@ -203,16 +203,16 @@ contract INV {
         if (rawAmount == uint(-1)) {
             amount = uint96(-1);
         } else {
-            amount = safe96(rawAmount, "INV::permit: amount exceeds 96 bits");
+            amount = safe96(rawAmount, "HONEY::permit: amount exceeds 96 bits");
         }
 
         bytes32 domainSeparator = keccak256(abi.encode(DOMAIN_TYPEHASH, keccak256(bytes(name)), getChainId(), address(this)));
         bytes32 structHash = keccak256(abi.encode(PERMIT_TYPEHASH, _owner, spender, rawAmount, nonces[_owner]++, deadline));
         bytes32 digest = keccak256(abi.encodePacked("\x19\x01", domainSeparator, structHash));
         address signatory = ecrecover(digest, v, r, s);
-        require(signatory != address(0), "INV::permit: invalid signature");
-        require(signatory == _owner, "INV::permit: unauthorized");
-        require(now <= deadline, "INV::permit: signature expired");
+        require(signatory != address(0), "HONEY::permit: invalid signature");
+        require(signatory == _owner, "HONEY::permit: unauthorized");
+        require(now <= deadline, "HONEY::permit: signature expired");
 
         allowances[_owner][spender] = amount;
 
@@ -235,7 +235,7 @@ contract INV {
      * @return Whether or not the transfer succeeded
      */
     function transfer(address dst, uint rawAmount) external returns (bool) {
-        uint96 amount = safe96(rawAmount, "INV::transfer: amount exceeds 96 bits");
+        uint96 amount = safe96(rawAmount, "HONEY::transfer: amount exceeds 96 bits");
         _transferTokens(msg.sender, dst, amount);
         return true;
     }
@@ -250,10 +250,10 @@ contract INV {
     function transferFrom(address src, address dst, uint rawAmount) external returns (bool) {
         address spender = msg.sender;
         uint96 spenderAllowance = allowances[src][spender];
-        uint96 amount = safe96(rawAmount, "INV::approve: amount exceeds 96 bits");
+        uint96 amount = safe96(rawAmount, "HONEY::approve: amount exceeds 96 bits");
 
         if (spender != src && spenderAllowance != uint96(-1)) {
-            uint96 newAllowance = sub96(spenderAllowance, amount, "INV::transferFrom: transfer amount exceeds spender allowance");
+            uint96 newAllowance = sub96(spenderAllowance, amount, "HONEY::transferFrom: transfer amount exceeds spender allowance");
             allowances[src][spender] = newAllowance;
 
             emit Approval(src, spender, newAllowance);
@@ -285,9 +285,9 @@ contract INV {
         bytes32 structHash = keccak256(abi.encode(DELEGATION_TYPEHASH, delegatee, nonce, expiry));
         bytes32 digest = keccak256(abi.encodePacked("\x19\x01", domainSeparator, structHash));
         address signatory = ecrecover(digest, v, r, s);
-        require(signatory != address(0), "INV::delegateBySig: invalid signature");
-        require(nonce == nonces[signatory]++, "INV::delegateBySig: invalid nonce");
-        require(now <= expiry, "INV::delegateBySig: signature expired");
+        require(signatory != address(0), "HONEY::delegateBySig: invalid signature");
+        require(nonce == nonces[signatory]++, "HONEY::delegateBySig: invalid nonce");
+        require(now <= expiry, "HONEY::delegateBySig: signature expired");
         return _delegate(signatory, delegatee);
     }
 
@@ -309,7 +309,7 @@ contract INV {
      * @return The number of votes the account had as of the given block
      */
     function getPriorVotes(address account, uint blockNumber) public view returns (uint96) {
-        require(blockNumber < block.number, "INV::getPriorVotes: not yet determined");
+        require(blockNumber < block.number, "HONEY::getPriorVotes: not yet determined");
 
         uint32 nCheckpoints = numCheckpoints[account];
         if (nCheckpoints == 0) {
@@ -353,15 +353,15 @@ contract INV {
     }
 
     function _transferTokens(address src, address dst, uint96 amount) internal {
-        require(src != address(0), "INV::_transferTokens: cannot transfer from the zero address");
-        require(dst != address(0), "INV::_transferTokens: cannot transfer to the zero address");
+        require(src != address(0), "HONEY::_transferTokens: cannot transfer from the zero address");
+        require(dst != address(0), "HONEY::_transferTokens: cannot transfer to the zero address");
 
         if(!tradable) {
-            require(whitelist[src], "INV::_transferTokens: src not whitelisted");
+            require(whitelist[src], "HONEY::_transferTokens: src not whitelisted");
         }
 
-        balances[src] = sub96(balances[src], amount, "INV::_transferTokens: transfer amount exceeds balance");
-        balances[dst] = add96(balances[dst], amount, "INV::_transferTokens: transfer amount overflows");
+        balances[src] = sub96(balances[src], amount, "HONEY::_transferTokens: transfer amount exceeds balance");
+        balances[dst] = add96(balances[dst], amount, "HONEY::_transferTokens: transfer amount overflows");
         emit Transfer(src, dst, amount);
 
         _moveDelegates(delegates[src], delegates[dst], amount);
@@ -372,21 +372,21 @@ contract INV {
             if (srcRep != address(0)) {
                 uint32 srcRepNum = numCheckpoints[srcRep];
                 uint96 srcRepOld = srcRepNum > 0 ? checkpoints[srcRep][srcRepNum - 1].votes : 0;
-                uint96 srcRepNew = sub96(srcRepOld, amount, "INV::_moveVotes: vote amount underflows");
+                uint96 srcRepNew = sub96(srcRepOld, amount, "HONEY::_moveVotes: vote amount underflows");
                 _writeCheckpoint(srcRep, srcRepNum, srcRepOld, srcRepNew);
             }
 
             if (dstRep != address(0)) {
                 uint32 dstRepNum = numCheckpoints[dstRep];
                 uint96 dstRepOld = dstRepNum > 0 ? checkpoints[dstRep][dstRepNum - 1].votes : 0;
-                uint96 dstRepNew = add96(dstRepOld, amount, "INV::_moveVotes: vote amount overflows");
+                uint96 dstRepNew = add96(dstRepOld, amount, "HONEY::_moveVotes: vote amount overflows");
                 _writeCheckpoint(dstRep, dstRepNum, dstRepOld, dstRepNew);
             }
         }
     }
 
     function _writeCheckpoint(address delegatee, uint32 nCheckpoints, uint96 oldVotes, uint96 newVotes) internal {
-      uint32 blockNumber = safe32(block.number, "INV::_writeCheckpoint: block number exceeds 32 bits");
+      uint32 blockNumber = safe32(block.number, "HONEY::_writeCheckpoint: block number exceeds 32 bits");
 
       if (nCheckpoints > 0 && checkpoints[delegatee][nCheckpoints - 1].fromBlock == blockNumber) {
           checkpoints[delegatee][nCheckpoints - 1].votes = newVotes;

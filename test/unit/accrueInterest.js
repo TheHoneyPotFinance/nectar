@@ -5,7 +5,7 @@ const { init, wallets, deployInv, deployXinv,
     supportMarket, balanceOf, getBlockNumber,
     evmSetAutomine, evmMine } = require('../util/xinv');
 
-describe("xINV Test", () => {
+describe("xHONEY Test", () => {
 
     before( async () => {
         await init();
@@ -20,24 +20,24 @@ describe("xINV Test", () => {
         await unitroller.connect(wallets.deployer)._setPendingImplementation(comptroller.address);
         await comptroller.connect(wallets.deployer)._become(unitroller.address);
     
-        xINV = await deployXinv();
+        xHONEY = await deployXinv();
     
-        // Ensure INV is transferable in test cases.
+        // Ensure HONEY is transferable in test cases.
         await inv.connect(wallets.deployer).openTheGates();
     });
     
     describe('accrue interest', () => {
 
         beforeEach( async () => {
-            await supportMarket(xINV.address, unitroller.address);
+            await supportMarket(xHONEY.address, unitroller.address);
         });
 
         it('should set the right rewards per block and treasury on init', async () => {
             const setRewardPerBlock = "200000000000000000";
             const setTreasury = wallets.treasury.address;
 
-            expect(await xINV.rewardPerBlock()).to.equal(setRewardPerBlock);
-            expect(await xINV.rewardTreasury()).to.equal(setTreasury);
+            expect(await xHONEY.rewardPerBlock()).to.equal(setRewardPerBlock);
+            expect(await xHONEY.rewardTreasury()).to.equal(setTreasury);
         });
 
         it('should only allow admin to set treasury reward', async () => {
@@ -45,14 +45,14 @@ describe("xINV Test", () => {
             const admin = wallets.deployer;
             const newTreasury = wallets.treasury;
             
-            const treasuryBefore = await xINV.rewardTreasury();
+            const treasuryBefore = await xHONEY.rewardTreasury();
             // expect no change in reward treasury
-            await xINV.connect(nonAdmin)._setRewardTreasury(newTreasury.address);
-            expect(await xINV.rewardTreasury()).to.equal(treasuryBefore);
+            await xHONEY.connect(nonAdmin)._setRewardTreasury(newTreasury.address);
+            expect(await xHONEY.rewardTreasury()).to.equal(treasuryBefore);
 
-            await expect(xINV.connect(admin)._setRewardTreasury(newTreasury.address))
-                .to.emit(xINV, "NewRewardTreasury").withArgs(treasuryBefore, newTreasury.address);
-            expect(await xINV.rewardTreasury()).to.equal(newTreasury.address);
+            await expect(xHONEY.connect(admin)._setRewardTreasury(newTreasury.address))
+                .to.emit(xHONEY, "NewRewardTreasury").withArgs(treasuryBefore, newTreasury.address);
+            expect(await xHONEY.rewardTreasury()).to.equal(newTreasury.address);
         });
 
         it('should only allow admin to set reward per block', async () => {
@@ -60,14 +60,14 @@ describe("xINV Test", () => {
             const admin = wallets.deployer;
             const newReward = "300000000000000000";
             
-            const rewardBefore = await xINV.rewardPerBlock();
+            const rewardBefore = await xHONEY.rewardPerBlock();
             // expect no change in reward per block with non-admin
-            await xINV.connect(nonAdmin)._setRewardPerBlock(newReward);
-            expect(await xINV.rewardPerBlock()).to.equal(rewardBefore);
+            await xHONEY.connect(nonAdmin)._setRewardPerBlock(newReward);
+            expect(await xHONEY.rewardPerBlock()).to.equal(rewardBefore);
 
-            await expect(xINV.connect(admin)._setRewardPerBlock(newReward))
-                .to.emit(xINV, "NewRewardPerBlock").withArgs(rewardBefore, newReward);
-            expect(await xINV.rewardPerBlock()).to.equal(newReward);
+            await expect(xHONEY.connect(admin)._setRewardPerBlock(newReward))
+                .to.emit(xHONEY, "NewRewardPerBlock").withArgs(rewardBefore, newReward);
+            expect(await xHONEY.rewardPerBlock()).to.equal(newReward);
     
         });
 
@@ -76,16 +76,16 @@ describe("xINV Test", () => {
             await evmSetAutomine(false);
 
             let accrualBlockNumberBefore = await getBlockNumber();
-            await xINV.accrueInterest();
-            await xINV.accrueInterest();
+            await xHONEY.accrueInterest();
+            await xHONEY.accrueInterest();
             let accrualBlockNumberAfter = await getBlockNumber();
             await evmMine();
             expect(accrualBlockNumberAfter).to.equal(accrualBlockNumberBefore);
 
             await evmSetAutomine(true);
             accrualBlockNumberBefore = await getBlockNumber();
-            await xINV.accrueInterest();
-            await xINV.accrueInterest();
+            await xHONEY.accrueInterest();
+            await xHONEY.accrueInterest();
             accrualBlockNumberAfter = await getBlockNumber();
             expect(BigNumber.from(accrualBlockNumberAfter)).to.equal(BigNumber.from(accrualBlockNumberBefore).add(2));
         });
@@ -95,50 +95,50 @@ describe("xINV Test", () => {
             const toMint = "10000000000000000000";
             await inv.connect(wallets.deployer).mint(wallets.treasury.address, toMint);
             await inv.connect(wallets.deployer).mint(wallets.deployer.address, toMint);
-            await inv.connect(wallets.deployer).approve(xINV.address, toMint);
-            await xINV.mint(toMint);
-            await xINV.accrueInterest();
+            await inv.connect(wallets.deployer).approve(xHONEY.address, toMint);
+            await xHONEY.mint(toMint);
+            await xHONEY.accrueInterest();
             await evmMine();
             // cannot transfer in after accrueInterest due to not enough allowance
-            expect(await balanceOf(inv, xINV.address)).to.equal(toMint);
+            expect(await balanceOf(inv, xHONEY.address)).to.equal(toMint);
 
-            await inv.connect(wallets.treasury).approve(xINV.address, toMint);
+            await inv.connect(wallets.treasury).approve(xHONEY.address, toMint);
 
             const delta = 3;
-            const expectedReward = String((await xINV.rewardPerBlock()) * delta);
+            const expectedReward = String((await xHONEY.rewardPerBlock()) * delta);
 
-            // xINV contract balance of underlying
-            const contractBalanceBefore = await balanceOf(inv, xINV.address);
+            // xHONEY contract balance of underlying
+            const contractBalanceBefore = await balanceOf(inv, xHONEY.address);
             // create delta of 3
-            await xINV.accrueInterest();
+            await xHONEY.accrueInterest();
             await evmMine();
-            await xINV.accrueInterest();
+            await xHONEY.accrueInterest();
             await evmMine();
-            await xINV.accrueInterest();
+            await xHONEY.accrueInterest();
             await evmMine();
 
             await evmSetAutomine(true);
 
-            const contractBalanceAfter = await balanceOf(inv, xINV.address);
+            const contractBalanceAfter = await balanceOf(inv, xHONEY.address);
             expect(contractBalanceAfter).to.equal(contractBalanceBefore.add(expectedReward));  
         });
 
         it('should accrue interest from treasury', async () => {
             const toMint = "10000000000000000000";
             await inv.connect(wallets.deployer).mint(wallets.treasury.address, toMint);
-            await inv.connect(wallets.treasury).approve(xINV.address, toMint);
+            await inv.connect(wallets.treasury).approve(xHONEY.address, toMint);
             await inv.connect(wallets.deployer).mint(wallets.deployer.address, toMint);
-            await inv.connect(wallets.deployer).approve(xINV.address, toMint);
-            await xINV.mint(toMint);
+            await inv.connect(wallets.deployer).approve(xHONEY.address, toMint);
+            await xHONEY.mint(toMint);
 
-            const contractBalanceBefore = await balanceOf(inv, xINV.address);
+            const contractBalanceBefore = await balanceOf(inv, xHONEY.address);
             const treasuryBalanceBefore = await balanceOf(inv, wallets.treasury.address);
-            const blockNumberPrior = await xINV.accrualBlockNumber();
-            await xINV.accrueInterest();
-            const blockNumberCurrent = await xINV.accrualBlockNumber();
-            const expectedReward = (await xINV.rewardPerBlock()).mul(blockNumberCurrent.sub(blockNumberPrior));
+            const blockNumberPrior = await xHONEY.accrualBlockNumber();
+            await xHONEY.accrueInterest();
+            const blockNumberCurrent = await xHONEY.accrualBlockNumber();
+            const expectedReward = (await xHONEY.rewardPerBlock()).mul(blockNumberCurrent.sub(blockNumberPrior));
             const treasuryBalanceAfter = await balanceOf(inv, wallets.treasury.address);
-            const contractBalanceAfter = await balanceOf(inv, xINV.address);
+            const contractBalanceAfter = await balanceOf(inv, xHONEY.address);
 
             expect(treasuryBalanceAfter).to.equal(treasuryBalanceBefore.sub(expectedReward));
             expect(contractBalanceAfter).to.equal(contractBalanceBefore.add(expectedReward));

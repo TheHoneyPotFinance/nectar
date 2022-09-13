@@ -29,7 +29,7 @@ Installation
 ------------
 Prerequisite: Install [yarn](https://classic.yarnpkg.com/en/docs/install/#debian-stable)
 ```bash
-    git clone https://github.com/InverseFinance/anchor.git
+    git clone https://github.com/TheHoneyPotFinance/anchor.git
     cd anchor
     yarn install --lock-file
 ```
@@ -49,4 +49,4 @@ Testing
 
 Documentation
 --------------
-You can read more about Inverse finance documentation [here](https://docs.inverse.finance/)
+You can read more about TheHoneyPot finance documentation [here](https://docs.inverse.finance/)

@@ -5,11 +5,11 @@ const { init, wallets, deployInv, deployXinv,
     supportMarket } = require('../util/xinv');
 
 let inv;
-let xINV;
+let xHONEY;
 let comptroller;
 let unitroller;
 
-describe("xINV Test", () => {
+describe("xHONEY Test", () => {
 
     before( async () => {
         await init();
@@ -23,16 +23,16 @@ describe("xINV Test", () => {
         await unitroller.connect(wallets.deployer)._setPendingImplementation(comptroller.address);
         await comptroller.connect(wallets.deployer)._become(unitroller.address);
     
-        xINV = await deployXinv();
+        xHONEY = await deployXinv();
     
-        // Ensure INV is transferable in test cases.
+        // Ensure HONEY is transferable in test cases.
         await inv.connect(wallets.deployer).openTheGates();
     });
     
     describe('comptroller', () => {
     
         beforeEach( async () => {
-            await supportMarket(xINV.address, unitroller.address);
+            await supportMarket(xHONEY.address, unitroller.address);
         });
     
         it('should only allow admin to set comptroller', async () => {
@@ -40,16 +40,16 @@ describe("xINV Test", () => {
             const signers = await hre.ethers.getSigners();
             let newComptroller = signers[3];
     
-            await xINV.connect(nonAdmin)._setComptroller(newComptroller.address);
-            expect(await xINV.comptroller()).to.equal(unitroller.address);
+            await xHONEY.connect(nonAdmin)._setComptroller(newComptroller.address);
+            expect(await xHONEY.comptroller()).to.equal(unitroller.address);
     
             // fail if not real comptroller contract
-            await expect(xINV.connect(wallets.deployer)._setComptroller(newComptroller.address)).to.be.reverted;
-            expect(await xINV.comptroller()).to.equal(unitroller.address);
+            await expect(xHONEY.connect(wallets.deployer)._setComptroller(newComptroller.address)).to.be.reverted;
+            expect(await xHONEY.comptroller()).to.equal(unitroller.address);
     
             newComptroller = comptroller;
-            await xINV.connect(wallets.deployer)._setComptroller(newComptroller.address);
-            expect(await xINV.comptroller()).to.equal(newComptroller.address);
+            await xHONEY.connect(wallets.deployer)._setComptroller(newComptroller.address);
+            expect(await xHONEY.comptroller()).to.equal(newComptroller.address);
         });
     });
 });
