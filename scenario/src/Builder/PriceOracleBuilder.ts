@@ -20,7 +20,7 @@ import {getContract, getTestContract} from '../Contract';
 
 const FixedPriceOracle = getTestContract('FixedPriceOracle');
 const SimplePriceOracle = getContract('SimplePriceOracle');
-const AnchorPriceOracle = getContract('AnchorPriceOracle');
+const NectarPriceOracle = getContract('NectarPriceOracle');
 const NotPriceOracle = getTestContract('NotPriceOracle');
 const PriceOracleInterface = getTestContract('PriceOracle');
 
@@ -66,19 +66,19 @@ export async function buildPriceOracle(world: World, from: string, event: Event)
       }
     ),
     new Fetcher<{poster: AddressV}, PriceOracleData>(`
-        #### Anchor
+        #### Nectar
 
-        * "Anchor <poster:Address>" - The anchor price oracle that caps price movements to anchors
-          * E.g. "PriceOracle Deploy Anchor 0x..."
+        * "Nectar <poster:Address>" - The anchor price oracle that caps price movements to anchors
+          * E.g. "PriceOracle Deploy Nectar 0x..."
       `,
-      "Anchor",
+      "Nectar",
       [
         new Arg("poster", getAddressV)
       ],
       async (world, {poster}) => {
         return {
-          invokation: await AnchorPriceOracle.deploy<PriceOracle>(world, from, [poster.val]),
-          description: "Anchor Price Oracle",
+          invokation: await NectarPriceOracle.deploy<PriceOracle>(world, from, [poster.val]),
+          description: "Nectar Price Oracle",
           poster: poster.val
         };
       }

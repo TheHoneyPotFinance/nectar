@@ -8,7 +8,7 @@ module.exports = async ({
     const {deploy, save} = deployments;
 
     const Unitroller = await deployments.get('Unitroller');
-    const Model = await deployments.get('DolaInterestRateModel');
+    const Model = await deployments.get('DewInterestRateModel');
     const {deployer, gov} = await getNamedAccounts();
 
     const name = prompt('Market name: ');

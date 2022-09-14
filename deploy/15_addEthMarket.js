@@ -10,11 +10,11 @@ module.exports = async ({
         from: deployer
     },
         "_supportMarket",
-        (await deployments.get('anETH')).address
+        (await deployments.get('nETH')).address
     )
     return true
   };
 
 module.exports.id = 'addEthMarket'
 module.exports.tags = ['addEthMarket'];
-module.exports.dependencies = ['Unitroller', 'anETH'];
+module.exports.dependencies = ['Unitroller', 'nETH'];

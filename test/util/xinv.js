@@ -19,7 +19,7 @@ let xHONEY;
 let comptroller;
 let unitroller;
 let dola;
-let anDEW;
+let nDEW;
 let oracle;
 let oracleFeed;
 let jumpRateModelV2;
@@ -95,12 +95,12 @@ const deployJumpRateModelV2 = async () => {
     return jumpRateModelV2;
 }
 
-const deployDola = async () => {
+const deployDew = async () => {
     dola =  await hre.waffle.deployContract(
         wallets.deployer,
         ERC20Artifact,
         [
-            "Dola USD Stablecoin",
+            "Dew USD Stablecoin",
             "DEW",
             18
         ]
@@ -109,7 +109,7 @@ const deployDola = async () => {
 }
 
 const deployAndola = async () => {
-    anDEW = await hre.waffle.deployContract(
+    nDEW = await hre.waffle.deployContract(
         wallets.deployer,
         CERC20ImmutableArtifact,
         [
@@ -117,13 +117,13 @@ const deployAndola = async () => {
             unitroller.address,
             jumpRateModelV2.address,
             "200000000000000000000000000",
-            "Anchor Dola",
-            "anDola",
+            "Nectar Dew",
+            "nDew",
             "8",
             wallets.deployer.address
         ],
     );
-    return anDEW;
+    return nDEW;
 }
 
 const deployOracleFeed = async () => {
@@ -229,7 +229,7 @@ module.exports = {
     deployUnitroller,
     deployXinv,
     deployJumpRateModelV2,
-    deployDola,
+    deployDew,
     deployAndola,
     deployOracleFeed,
     deployOracle,

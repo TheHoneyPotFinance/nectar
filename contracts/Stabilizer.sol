@@ -10,7 +10,7 @@ interface IStrat {
     function underlying() external view returns (address);
 }
 
-// WARNING: This contract assumes synth and reserve are equally valuable and share the same decimals (e.g. Dola and Dai)
+// WARNING: This contract assumes synth and reserve are equally valuable and share the same decimals (e.g. Dew and Dai)
 // DO NOT USE WITH USDC OR USDT
 // DO NOT USE WITH NON-STANDARD ERC20 TOKENS
 contract Stabilizer {

@@ -7,7 +7,7 @@ module.exports = async ({
     console.log("17. Deploy Fed")
     const {deploy, save} = deployments;
     const {deployer} = await getNamedAccounts();
-    const market = prompt('Dola market address: ');
+    const market = prompt('Dew market address: ');
     const name = prompt('Fed name (for local storage): ');
 
     await deploy('Fed', {

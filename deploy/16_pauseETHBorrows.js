@@ -11,7 +11,7 @@ module.exports = async ({
         //gasLimit:"2000000"
     },
         "_setBorrowPaused",
-        (await deployments.get('anETH')).address,
+        (await deployments.get('nETH')).address,
         true
     )
     return true

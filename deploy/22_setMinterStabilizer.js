@@ -6,7 +6,7 @@ module.exports = async ({
     const {execute} = deployments;
     const {deployer} = await getNamedAccounts()
 
-    await execute('Dola', {
+    await execute('Dew', {
         from: deployer
     },
         "addMinter",
@@ -16,4 +16,4 @@ module.exports = async ({
   };
 module.exports.id = 'addMinterStabilizer'
 module.exports.tags = ['addMinterStabilizer'];
-module.exports.dependencies = ['Dola', 'Stabilizer'];
+module.exports.dependencies = ['Dew', 'Stabilizer'];

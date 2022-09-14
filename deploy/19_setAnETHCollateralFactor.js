@@ -2,7 +2,7 @@ module.exports = async ({
   deployments,
   getNamedAccounts,
 }) => {
-  console.log("19. Set AnETH Collateral Factor to 50%")
+  console.log("19. Set Nectar ETH Collateral Factor to 50%")
   const {execute} = deployments;
   const {deployer} = await getNamedAccounts()
 
@@ -10,7 +10,7 @@ module.exports = async ({
       from: deployer
   },
       "_setCollateralFactor",
-      (await deployments.get('anETH')).address,
+      (await deployments.get('nETH')).address,
       "500000000000000000" // 50%
   )
   return true

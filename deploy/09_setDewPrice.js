@@ -2,7 +2,7 @@ module.exports = async ({
     deployments,
     getNamedAccounts,
   }) => {
-    console.log("9. Set Dola fixed price")
+    console.log("9. Set Dew fixed price")
     const {execute} = deployments;
     const {deployer} = await getNamedAccounts()
 
@@ -10,11 +10,11 @@ module.exports = async ({
         from: deployer,
     },
         "setFixedPrice",
-        (await deployments.get('anDola')).address,
+        (await deployments.get('nDew')).address,
         "1000000000000000000"
     )
     return true
   };
-module.exports.id = 'setDolaPrice';
-module.exports.tags = ['setDolaPrice'];
-module.exports.dependencies = ['Oracle', 'anDola'];
+module.exports.id = 'setDewPrice';
+module.exports.tags = ['setDewPrice'];
+module.exports.dependencies = ['Oracle', 'nDew'];

@@ -7,19 +7,19 @@ interface PriceOracleMethods {
   setUnderlyingPrice(cToken: string, amount: encodedNumber): Sendable<number>
   setDirectPrice(address: string, amount: encodedNumber): Sendable<number>
 
-  // Anchor Price Oracle
+  // Nectar Price Oracle
   getPrice(asset: string): Callable<number>
   readers(asset: string): Callable<string>
   anchorAdmin(): Callable<string>
-  pendingAnchorAdmin(): Callable<string>
+  pendingNectarAdmin(): Callable<string>
   poster(): Callable<string>
   maxSwing(): Callable<number>
   anchors(asset: string): Callable<{0: number, 1: number}>
-  pendingAnchors(asset: string): Callable<number>
-  _setPendingAnchor(asset: string, price: encodedNumber): Sendable<number>
+  pendingNectars(asset: string): Callable<number>
+  _setPendingNectar(asset: string, price: encodedNumber): Sendable<number>
   _setPaused(paused: boolean): Sendable<number>
-  _setPendingAnchorAdmin(string): Sendable<number>
-  _acceptAnchorAdmin(): Sendable<number>
+  _setPendingNectarAdmin(string): Sendable<number>
+  _acceptNectarAdmin(): Sendable<number>
   setPrice(asset: string, price: encodedNumber): Sendable<number>
   setPrices(assets: string[], prices: encodedNumber[]): Sendable<number>
 }

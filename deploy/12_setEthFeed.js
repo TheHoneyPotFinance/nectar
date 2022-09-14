@@ -9,7 +9,7 @@ module.exports = async ({
         from: deployer,
     },
         "setFeed",
-        (await deployments.get('anETH')).address,
+        (await deployments.get('nETH')).address,
         ethFeed,
         18
     )
@@ -18,4 +18,4 @@ module.exports = async ({
 
 module.exports.id = 'setEthFeed';
 module.exports.tags = ['setEthFeed'];
-module.exports.dependencies = ['Oracle', 'anETH'];
+module.exports.dependencies = ['Oracle', 'nETH'];

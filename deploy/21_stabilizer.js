@@ -9,7 +9,7 @@ module.exports = async ({
     await deploy('Stabilizer', {
       from: deployer,
       args:[
-        (await deployments.get('Dola')).address,
+        (await deployments.get('Dew')).address,
         dai,
         gov,
         "10", // 0.1% buy fee
@@ -20,4 +20,4 @@ module.exports = async ({
   };
 
   module.exports.tags = ['Stabilizer'];
-  module.exports.dependencies = ['Dola'];
+  module.exports.dependencies = ['Dew'];

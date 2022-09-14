@@ -1435,7 +1435,7 @@
         {
             "constant": true,
             "inputs": [],
-            "name": "pendingAnchorAdmin",
+            "name": "pendingNectarAdmin",
             "outputs": [
                 {
                     "name": "",
@@ -1538,7 +1538,7 @@
                     "type": "address"
                 }
             ],
-            "name": "pendingAnchors",
+            "name": "pendingNectars",
             "outputs": [
                 {
                     "name": "",
@@ -1651,7 +1651,7 @@
                     "type": "uint256"
                 }
             ],
-            "name": "NewPendingAnchor",
+            "name": "NewPendingNectar",
             "type": "event"
         },
         {
@@ -1725,16 +1725,16 @@
             "inputs": [
                 {
                     "indexed": false,
-                    "name": "oldPendingAnchorAdmin",
+                    "name": "oldPendingNectarAdmin",
                     "type": "address"
                 },
                 {
                     "indexed": false,
-                    "name": "newPendingAnchorAdmin",
+                    "name": "newPendingNectarAdmin",
                     "type": "address"
                 }
             ],
-            "name": "NewPendingAnchorAdmin",
+            "name": "NewPendingNectarAdmin",
             "type": "event"
         },
         {
@@ -1742,16 +1742,16 @@
             "inputs": [
                 {
                     "indexed": false,
-                    "name": "oldAnchorAdmin",
+                    "name": "oldNectarAdmin",
                     "type": "address"
                 },
                 {
                     "indexed": false,
-                    "name": "newAnchorAdmin",
+                    "name": "newNectarAdmin",
                     "type": "address"
                 }
             ],
-            "name": "NewAnchorAdmin",
+            "name": "NewNectarAdmin",
             "type": "event"
         },
         {
@@ -1788,7 +1788,7 @@
                     "type": "uint256"
                 }
             ],
-            "name": "_setPendingAnchor",
+            "name": "_setPendingNectar",
             "outputs": [
                 {
                     "name": "",
@@ -1822,11 +1822,11 @@
             "constant": false,
             "inputs": [
                 {
-                    "name": "newPendingAnchorAdmin",
+                    "name": "newPendingNectarAdmin",
                     "type": "address"
                 }
             ],
-            "name": "_setPendingAnchorAdmin",
+            "name": "_setPendingNectarAdmin",
             "outputs": [
                 {
                     "name": "",
@@ -1840,7 +1840,7 @@
         {
             "constant": false,
             "inputs": [],
-            "name": "_acceptAnchorAdmin",
+            "name": "_acceptNectarAdmin",
             "outputs": [
                 {
                     "name": "",
@@ -2038,7 +2038,7 @@
                     "type": "uint256"
                 }
             ],
-            "name": "AnchorPriceUpdated",
+            "name": "NectarPriceUpdated",
             "type": "event"
         },
         {
@@ -2518,7 +2518,7 @@
         },
         {
             "inputs": [],
-            "name": "lowerBoundAnchorRatio",
+            "name": "lowerBoundNectarRatio",
             "outputs": [
                 {
                     "internalType": "uint256",
@@ -2729,7 +2729,7 @@
         },
         {
             "inputs": [],
-            "name": "upperBoundAnchorRatio",
+            "name": "upperBoundNectarRatio",
             "outputs": [
                 {
                     "internalType": "uint256",

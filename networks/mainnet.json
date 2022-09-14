@@ -122,7 +122,7 @@
         "ComptrollerG7": 11458479
     },
     "PriceFeed": {
-        "description": "Open Oracle Uniswap Anchored View + UNI",
+        "description": "Open Oracle Uniswap Nectared View + UNI",
         "address": "0x922018674c12a7f0d394ebeef9b58f186cde13c1"
     },
     "PriceOracleProxy": {

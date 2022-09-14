@@ -1,8 +1,8 @@
 {
   "language": "Solidity",
   "sources": {
-    "contracts/DolaFeed.sol": {
-      "content": "pragma solidity ^0.5.16;\n\ninterface IFeed {\n    function decimals() external view returns (uint8);\n    function latestAnswer() external view returns (uint);\n}\n\ncontract DolaFeed is IFeed {\n\n    function decimals() public view returns(uint8) {\n        return 18;\n    }\n\n    function latestAnswer() public view returns (uint) {\n        return 1 ether;\n    }\n\n}"
+    "contracts/DewFeed.sol": {
+      "content": "pragma solidity ^0.5.16;\n\ninterface IFeed {\n    function decimals() external view returns (uint8);\n    function latestAnswer() external view returns (uint);\n}\n\ncontract DewFeed is IFeed {\n\n    function decimals() public view returns(uint8) {\n        return 18;\n    }\n\n    function latestAnswer() public view returns (uint) {\n        return 1 ether;\n    }\n\n}"
     }
   },
   "settings": {

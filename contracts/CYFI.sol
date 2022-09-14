@@ -6,7 +6,7 @@ interface IDelegateRegistry {
     function setDelegate(bytes32 id, address delegate) external;
 }
 
-contract CYFI is CErc20 {
+contract CGMX is CErc20 {
 
     IDelegateRegistry public delegateRegistry;
 
@@ -45,7 +45,7 @@ contract CYFI is CErc20 {
 
     function delegate(address delegate_) public {
         require(msg.sender == admin, "only admin may delegate");
-        // ybaby.eth is the id used for YFI governance
+        // ybaby.eth is the id used for GMX governance
         delegateRegistry.setDelegate('ybaby.eth', delegate_);
     }
 

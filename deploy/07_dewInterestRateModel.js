@@ -2,7 +2,7 @@ module.exports = async ({
     deployments,
     getNamedAccounts,
   }) => {
-    console.log("7. Deploy Dola Interest Rate Model")
+    console.log("7. Deploy Dew Interest Rate Model")
     const {deploy, save} = deployments;
     const {deployer, gov} = await getNamedAccounts()
 
@@ -18,7 +18,7 @@ module.exports = async ({
     });
 
     const Model = await deployments.get('JumpRateModelV2');
-    await save("DolaInterestRateModel", Model);
+    await save("DewInterestRateModel", Model);
   };
 
-module.exports.tags = ['DolaInterestRateModel'];
+module.exports.tags = ['DewInterestRateModel'];

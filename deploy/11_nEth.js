@@ -2,7 +2,7 @@ module.exports = async ({
     deployments,
     getNamedAccounts
   }) => {
-    console.log("11. Deploy anETH")
+    console.log("11. Deploy nETH")
     const {deploy, save} = deployments;
     const {deployer} = await getNamedAccounts()
 
@@ -15,16 +15,16 @@ module.exports = async ({
         Unitroller.address,
         Model.address,
         "200000000000000000000000000",
-        "Anchor Ether",
-        "anETH",
+        "Nectar Ether",
+        "nETH",
         "8",
         deployer
       ]
     });
 
     const CERC20 = await deployments.get('CEther');
-    await save("anETH", CERC20);
+    await save("nETH", CERC20);
   };
 
 module.exports.dependencies = ['EthInterestRateModel', 'Unitroller'];
-module.exports.tags = ['anETH'];
+module.exports.tags = ['nETH'];

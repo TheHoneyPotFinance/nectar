@@ -3,7 +3,7 @@ const { expect } = require("chai");
 const hre = require("hardhat");
 const { init, wallets, deployInv, deployXinv, 
     deployComptroller, deployUnitroller, deployJumpRateModelV2,
-    deployOracleFeed, deployAndola, deployDola, deployOracle, 
+    deployOracleFeed, deployAndola, deployDew, deployOracle, 
     supportMarket, batchMintXinv, batchMintInv,
     evmMine } = require('../util/xinv');
 const toMint3 = hre.ethers.utils.parseEther("3");
@@ -13,7 +13,7 @@ let xHONEY;
 let comptroller;
 let unitroller;
 let dola;
-let anDEW;
+let nDEW;
 let oracle;
 let oracleFeed;
 let jumpRateModelV2;
@@ -52,18 +52,18 @@ describe("xHONEY Test", () => {
             // set insanely high interest rate for testing purposes
             jumpRateModelV2 = await deployJumpRateModelV2();
 
-            dola = await deployDola();
+            dola = await deployDew();
 
-            anDEW = await deployAndola();
-            // support anDEW market
-            await expect(unitrollerProxy_.connect(wallets.deployer)._supportMarket(anDEW.address)).to.emit(unitrollerProxy_, "MarketListed");
+            nDEW = await deployAndola();
+            // support nDEW market
+            await expect(unitrollerProxy_.connect(wallets.deployer)._supportMarket(nDEW.address)).to.emit(unitrollerProxy_, "MarketListed");
 
             oracleFeed = await deployOracleFeed();
 
             // set comptroller price oracle
             oracle = await deployOracle();
             const collateralPrice = hre.ethers.utils.parseEther("1");
-            const borrowedPrice = BigNumber.from(2e10); // anDEW
+            const borrowedPrice = BigNumber.from(2e10); // nDEW
             await oracle.connect(wallets.deployer).setFeed(xHONEY.address, oracleFeed.address, 18);
             const feedData = await oracle.feeds(xHONEY.address);
             expect(feedData["addr"]).to.equal(oracleFeed.address);
@@ -72,8 +72,8 @@ describe("xHONEY Test", () => {
             await oracle.connect(wallets.deployer).setFixedPrice(xHONEY.address, collateralPrice);
             expect(await oracle.fixedPrices(xHONEY.address)).to.equal(collateralPrice);
 
-            await oracle.connect(wallets.deployer).setFixedPrice(anDEW.address, borrowedPrice);
-            expect(await oracle.fixedPrices(anDEW.address)).to.equal(borrowedPrice);
+            await oracle.connect(wallets.deployer).setFixedPrice(nDEW.address, borrowedPrice);
+            expect(await oracle.fixedPrices(nDEW.address)).to.equal(borrowedPrice);
 
             await expect(unitrollerProxy_.connect(wallets.deployer)._setPriceOracle(oracle.address)).to.emit(unitrollerProxy_, "NewPriceOracle");
         });
@@ -83,12 +83,12 @@ describe("xHONEY Test", () => {
             const liquidator = wallets.deployer;
             // set params
             await supportMarket(xHONEY.address, unitroller.address);
-            await supportMarket(anDEW.address, unitroller.address);
+            await supportMarket(nDEW.address, unitroller.address);
             expect((await unitrollerProxy_.markets(xHONEY.address))["isListed"]).to.equal(true);
-            expect((await unitrollerProxy_.markets(anDEW.address))["isListed"]).to.equal(true);
+            expect((await unitrollerProxy_.markets(nDEW.address))["isListed"]).to.equal(true);
 
             await expect(unitrollerProxy_.connect(wallets.deployer)._setCollateralFactor(xHONEY.address, "900000000000000000")).to.emit(unitrollerProxy_, "NewCollateralFactor");
-            await expect(unitrollerProxy_.connect(wallets.deployer)._setCollateralFactor(anDEW.address, "900000000000000000")).to.emit(unitrollerProxy_, "NewCollateralFactor");
+            await expect(unitrollerProxy_.connect(wallets.deployer)._setCollateralFactor(nDEW.address, "900000000000000000")).to.emit(unitrollerProxy_, "NewCollateralFactor");
             expect((await unitrollerProxy_.markets(xHONEY.address))["collateralFactorMantissa"]).to.equal("900000000000000000");
             
             // close factor. to calculate repayment
@@ -101,29 +101,29 @@ describe("xHONEY Test", () => {
             await batchMintInv([ borrower ], "999000000000000000000"); // 999
             await batchMintXinv([ borrower ], "999000000000000000000"); // 999
 
-            await unitrollerProxy_.connect(wallets.deployer).enterMarkets([ xHONEY.address, anDEW.address ]);
+            await unitrollerProxy_.connect(wallets.deployer).enterMarkets([ xHONEY.address, nDEW.address ]);
 
-            // mint enough dola (anDEW underlying)
+            // mint enough dola (nDEW underlying)
             await dola.connect(wallets.deployer).mint(wallets.deployer.address, "850000000000000000000000"); // 850,000 DEW
             await dola.connect(wallets.deployer).mint(borrower.address, "50000000000000000000000"); // 50,000 DEW
 
-            await dola.connect(wallets.deployer).approve(anDEW.address, "850000000000000000000000");
+            await dola.connect(wallets.deployer).approve(nDEW.address, "850000000000000000000000");
 
-            // mint anDEW to provide underlying dola liquidity to anchor
-            await dola.connect(borrower).approve(anDEW.address, "50000000000000000000000");
-            await anDEW.connect(borrower).mint("50000000000000000000000"); // 50,000
+            // mint nDEW to provide underlying dola liquidity to anchor
+            await dola.connect(borrower).approve(nDEW.address, "50000000000000000000000");
+            await nDEW.connect(borrower).mint("50000000000000000000000"); // 50,000
 
             // check deposits (collaterals) of borrower
 
-            // borrow ~ available balance (this amount should be less than total dola + minted anDEW)
-            await anDEW.connect(borrower).borrow("45000000000000000000000");
-            // at this point, borrower has 50K anDEW and 45K dola
+            // borrow ~ available balance (this amount should be less than total dola + minted nDEW)
+            await nDEW.connect(borrower).borrow("45000000000000000000000");
+            // at this point, borrower has 50K nDEW and 45K dola
             // mine many blocks to accrue interest and make borrower undercollateralized
             // account is immediately liquidatable once shortfall > 0
             let shortfall = 0;
             while (shortfall == 0) {
                 await evmMine();
-                await anDEW.accrueInterest();
+                await nDEW.accrueInterest();
                 const [ _err, _liquidity, shortfall_ ] = await unitrollerProxy_.getAccountLiquidity(borrower.address);
                 if (shortfall_ > 0) {
                     shortfall = shortfall_;
@@ -132,13 +132,13 @@ describe("xHONEY Test", () => {
             
             // calculate amount to repay
             // accrue interest and get borrow balance stored for borrower
-            await anDEW.accrueInterest();
-            const toRepay = await anDEW.borrowBalanceStored(borrower.address);
+            await nDEW.accrueInterest();
+            const toRepay = await nDEW.borrowBalanceStored(borrower.address);
 
             // seizable collateral tokens
             // tokens are transferred to liquidator in underlying
             // amount = scaled exchange rate * seizeTokens
-            const [ _err, seizableXHONEY ] = await unitrollerProxy_.liquidateCalculateSeizeTokens(anDEW.address, xHONEY.address, toRepay);
+            const [ _err, seizableXHONEY ] = await unitrollerProxy_.liquidateCalculateSeizeTokens(nDEW.address, xHONEY.address, toRepay);
 
             const liquidatorSeizeTokensUnderlyingBefore = await inv.balanceOf(liquidator.address);
             const exchangeRateMantissa = await xHONEY.exchangeRateStored(); // same as current exchange rate
@@ -146,9 +146,9 @@ describe("xHONEY Test", () => {
             const borrowerXHONEYBalanceBefore = await xHONEY.balanceOf(borrower.address);
 
             // liquidateBorrow
-            const borrowerBalanceBefore = await anDEW.borrowBalanceStored(borrower.address);
-            await expect(anDEW.connect(liquidator).liquidateBorrow(borrower.address, toRepay, xHONEY.address))
-                .to.emit(anDEW, "LiquidateBorrow");
+            const borrowerBalanceBefore = await nDEW.borrowBalanceStored(borrower.address);
+            await expect(nDEW.connect(liquidator).liquidateBorrow(borrower.address, toRepay, xHONEY.address))
+                .to.emit(nDEW, "LiquidateBorrow");
 
             // liquidator adjusted balances
             const liquidatorSeizeTokensUnderlyingAfter = await inv.balanceOf(liquidator.address);

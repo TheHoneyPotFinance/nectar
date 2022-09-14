@@ -5,7 +5,7 @@ interface IFeed {
     function latestAnswer() external view returns (uint);
 }
 
-contract DolaFeed is IFeed {
+contract DewFeed is IFeed {
 
     function decimals() public view returns(uint8) {
         return 18;

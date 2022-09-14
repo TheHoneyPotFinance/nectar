@@ -28,7 +28,7 @@ import { mcdFetchers, getMCDValue } from './Value/MCDValue';
 import { getInterestRateModelValue, interestRateModelFetchers } from './Value/InterestRateModelValue';
 import { getPriceOracleValue, priceOracleFetchers } from './Value/PriceOracleValue';
 import { getPriceOracleProxyValue, priceOracleProxyFetchers } from './Value/PriceOracleProxyValue';
-import { getAnchoredViewValue, anchoredViewFetchers } from './Value/AnchoredViewValue';
+import { getNectaredViewValue, anchoredViewFetchers } from './Value/NectaredViewValue';
 import { getTimelockValue, timelockFetchers, getTimelockAddress } from './Value/TimelockValue';
 import { getMaximillionValue, maximillionFetchers } from './Value/MaximillionValue';
 import { getCompValue, compFetchers } from './Value/CompValue';
@@ -913,12 +913,12 @@ const fetchers = [
   ),
   new Fetcher<{ res: Value }, Value>(
     `
-      #### AnchoredView
+      #### NectaredView
 
-      * "AnchoredView ...anchoredViewArgs" - Returns AnchoredView value
+      * "NectaredView ...anchoredViewArgs" - Returns NectaredView value
     `,
-    'AnchoredView',
-    [new Arg('res', getAnchoredViewValue, { variadic: true })],
+    'NectaredView',
+    [new Arg('res', getNectaredViewValue, { variadic: true })],
     async (world, { res }) => res,
     { subExpressions: anchoredViewFetchers() }
   ),

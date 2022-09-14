@@ -45,7 +45,11 @@ module.exports = {
     fantom:{
       url: "https://rpc.ftm.tools/",
       accounts: [process.env.MAINNET_PRIVKEY]
-    }
+    }, 
+	arbitrum: {
+		url: "",
+		accounts: [process.env.MAINNET_PRIVKEY]
+	}
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY
@@ -53,20 +57,23 @@ module.exports = {
   namedAccounts: {
     dai: {
       1:"0x6b175474e89094c44da98b954eedeac495271d0f",
-      4:"0xc7AD46e0b8a400Bb3C915120d284AafbA8fc4735"
+      4:"0xc7AD46e0b8a400Bb3C915120d284AafbA8fc4735",
+	  42161: "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1"
     },
     ethFeed:{
       1:"0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419",
-      4:"0x8A753747A1Fa494EC906cE90E9f37563A8AF630e"
+      4:"0x8A753747A1Fa494EC906cE90E9f37563A8AF630e",
+	  42161: "0x639Fe6ab55C921f74e7fac1ee960C0B6293ba612"
     },
-    yfi: {
-      1:"0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e"
+    gmx: {
+      42161:"0xfc5A1A6EB076a2C7aD06eD22C90d7E710E35ad0a"
     },
     delegateRegistry: {
       1:"0x469788fE6E9E9681C6ebF3bF78e7Fd26Fc015446"
     },
     sushiFeed:{
-      1:"0xe572CeF69f43c2E488b33924AF04BDacE19079cf"
+      1:"0xe572CeF69f43c2E488b33924AF04BDacE19079cf",
+	  42161: "0xb2A8BA74cbca38508BA1632761b56C897060147C"
     },
     sushiExchangeRate:{
       1:"0x851a040fC0Dcbb13a272EBC272F2bC2Ce1e11C4d"
@@ -81,6 +88,7 @@ module.exports = {
     },
     weth:{
       1:"0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+	  42161: "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1"
     },
     invKeep3rFeed:{
       1:"0x39b1dF026010b5aEA781f90542EE19E900F2Db15",
